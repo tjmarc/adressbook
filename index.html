@@ -7,6 +7,7 @@
     <script src="app.js"></script>
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.rawgit.com/abdmob/x2js/master/xml2json.js"></script>
   </head>
   <body>
 
@@ -44,6 +45,13 @@
           </uib-tab>
         </uib-tabset>
       </form>
+
+      <hr/>
+ 
+      Model:
+      <pre>{{ model | json }}</pre>
+      Nested Form:
+      <pre>{{ mainForm.inputForm | json }}</pre>
     </div>
   </body>
 </html>

@@ -1,6 +1,3 @@
-angular.module('addressbook', ['ui.bootstrap']);
-angular.module('addressbook').controller('MainCtrl', function ($scope) {
-
 var rawData = "P|Carl Gustaf|Bernadotte\r\nT|0768-101801|08-101801\nA|Drottningholms slott|Stockholm|10001\nF|Victoria|1977\nA|Haga Slott|Stockholm|10002\nF|Carl Philip|1979\r\nT|0768-101802|08-101802\rP|Barack|Obama\nA|1600 Pennsylvania Avenue|Washington, D.C";
 /* Our business logic:
 All constructors and setters of FamilyNode and its descendants accept a unique parameter, entry. 
@@ -144,25 +141,3 @@ AddressBook.prototype.parseData = function(dataArray) {
     });
 }
 
-  var dataArray = parseCSV(rawData);
-  var addressBook = new AddressBook();
-  addressBook.parseData(dataArray);
-  var x2js = new X2JS();
-  //var JSONData = JSON.stringify({people: addressBook.person});
-var XMLData = x2js.json2xml_str({people:{person: addressBook.person}});
-
-
-  $scope.model = {
-    data: 'Please paste your data here'
-    , dataArray: dataArray
-    , person: addressBook.person
-    //, json: JSONData
-    , xml: XMLData
-
-  };
-
-
-
-
-  
-});
