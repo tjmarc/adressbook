@@ -1,0 +1,50 @@
+<!doctype html>
+<html ng-app="addressbook">
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.1.js"></script>
+    <script src="app.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+
+    <div ng-controller="MainCtrl">
+      <form name="mainForm" class="tab-main-form">
+        <uib-tabset active="1">
+          <uib-tab index="0" heading="CSV data:" disable="true"></uib-tab>
+          <uib-tab index="1" heading="input">
+            <ng-form name="inputForm">
+              <div class="form-group">
+                <textarea class="form-control" required ng-model="model.data"></textarea>
+                TODO: string/object converter (parser)
+              </div>
+            </ng-form>
+          </uib-tab>
+          <uib-tab index="2" heading="upload">
+            <ng-form name="uploadForm">
+              <div class="form-group">
+                <label>Please select your CSV file</label>
+                <input type="file" class="form-control" required ng-model="model.data"/>
+                TODO: file/object converter (parser) or file/string converter (using parser from input form)
+              </div>
+            </ng-form>
+          </uib-tab>
+          <uib-tab index="3" heading="Address book:" disable="true"></uib-tab>
+          <uib-tab index="4" heading="browse">
+            TODO: tree browser
+          </uib-tab>
+          <uib-tab index="5" heading="XML">
+            <pre></pre>
+            TODO: XML formatter 
+          </uib-tab>
+          <uib-tab index="6" heading="download">
+            TODO: file download
+          </uib-tab>
+        </uib-tabset>
+      </form>
+    </div>
+  </body>
+</html>
+
