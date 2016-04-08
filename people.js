@@ -11,9 +11,21 @@ F can be followed by T and A
 */
 
 // a simple exception class
-function DataException(errorMsg) {
+function DataException(errorType,errorMsg) {
+    this.type = errorType,
     this.message = errorMsg,
-    this.name = DataException
+    this.name = 'DataException'
+}
+
+// a container for logging parser warnings and errors
+function ParserLog() {
+    this.logger = [];
+}
+ParserLog.prototype.log = function(message){
+    this.logger.push(message);
+}
+ParserLog.prototype.list = function(){
+    return this.logger.join('\r\n');
 }
 
 // temporary - to be turned into validator
@@ -21,14 +33,14 @@ function DataException(errorMsg) {
 function isRowOK(entry) {
     var error, expectedLength;
     if ( ! /^[PFAT]$/.test(entry[0]) ) 
-        error = "unknown row type " + entry[0];
+        throw new DataException("error", "unknown row type " + entry[0]);
     expectedLength = ( entry[0] == 'A' ) ? 4 : 3;
     if ( entry.length != expectedLength )
         error = 'row is too ' 
                 + ( entry.length > expectedLength ? 'long' : 'short' )
                 + '; expected ' + expectedLength + ' fields';
     if (error) {
-        throw new DataException(error);
+        throw new DataException("warning", error);
     }
 }
 
@@ -45,7 +57,7 @@ FamilyNode.prototype.hasAddress = function() {
 // both can have phones
 FamilyNode.prototype.setPhoneNumbers = function(entry) {
     if (this.hasPhoneNumbers()) 
-        throw new DataException("multiple phone numbers; leaving previous values intact");
+        throw new DataException("warning", "multiple phone numbers; leaving previous values intact");
     this.mobile = entry[1];
     this.fixedNumber = entry[2];
 }
@@ -53,7 +65,7 @@ FamilyNode.prototype.setPhoneNumbers = function(entry) {
 // both can have addresses
 FamilyNode.prototype.setAddress = function(entry) {
     if (this.hasAddress()) 
-        throw new DataException("multiple addresses; leaving previous values intact");
+        throw new DataException("warning", "multiple addresses; leaving previous values intact");
     this.street = entry[1];
     this.city = entry[2];
     this.postalCode = entry[3];
@@ -88,16 +100,6 @@ function FamilyMember(entry) {
 FamilyMember.prototype = Object.create(FamilyNode.prototype);
 FamilyMember.prototype.constructor = FamilyMember;
 
-
-// we also need a simple CSV parser to split data lines into fields (returns array of arrays)
-function parseCSV(rawData) {
-    // Windows, Mac, or Unix?
-    var lines = rawData.trim().split(/\r\n|\r|\n/);
-    return lines.map(function(line) {
-        return line.split(/\|/);
-    });
-}
-
 // our main goal - a collection of persons and their family members, both types with additional data
 function AddressBook() {
     this.people = {person:[]};
@@ -106,10 +108,11 @@ function AddressBook() {
 AddressBook.prototype.parseData = function(dataArray) {
     var entry, person, familyMember;
     var self = this;
+    this.parserLog = new ParserLog();
     dataArray.forEach( function(entry, index, data ){
         try {
             if (entry[0] != 'P' && person == null) {
-                throw new DataException("unidentified person - row omitted");
+                throw new DataException("error", "unidentified person - row omitted");
             }
             else {
                 switch (entry[0]) {
@@ -134,7 +137,7 @@ AddressBook.prototype.parseData = function(dataArray) {
 
         }
         catch(e){ 
-            console.log("error at row " + index + ' (' + entry.join('|') + '): ' + e.message)
+            self.parserLog.log(e.type+" at row " + (index +1) + ' (' + entry.join('|') + '): ' + e.message)
         }
 
     });
