@@ -37,10 +37,11 @@ angular.module('addressbook').controller('MainCtrl', function($scope, $filter) {
     }
   },true);
 
+/*
   $scope.getBlob = function(){
     return new Blob([$scope.model.xml], {type: "application/xml"});
   }
-
+*/
 
 });
 
@@ -82,6 +83,7 @@ angular.module('addressbook').directive('fileChange',['$parse', function($parse)
   }
 }]);
 
+/*
 angular.module('addressbook').directive('xmlDownload', function ($compile) {
     return {
         restrict:'E',
@@ -97,4 +99,4 @@ angular.module('addressbook').directive('xmlDownload', function ($compile) {
         }
     };
 });  
-
+*/
