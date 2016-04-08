@@ -1,34 +1,34 @@
 <!doctype html>
 <html ng-app="addressbook">
   <head>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
-    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.1.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.js"></script>
+    <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.1.js"></script>
+    <script src="people.js"></script>
     <script src="app.js"></script>
-    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.rawgit.com/abdmob/x2js/master/xml2json.js"></script>
+    <script src="https://www.reucon.com/cdn/js/vkBeautify-0.99.00.beta/vkbeautify.js"></script>
   </head>
   <body>
 
     <div ng-controller="MainCtrl">
       <form name="mainForm" class="tab-main-form">
-        <uib-tabset active="1">
+        <uib-tabset active="2">
           <uib-tab index="0" heading="CSV data:" disable="true"></uib-tab>
-          <uib-tab index="1" heading="input">
-            <ng-form name="inputForm">
+          <uib-tab index="1" heading="upload">
+            <ng-form name="uploadForm"> 
               <div class="form-group">
-                <textarea class="form-control" required ng-model="model.data"></textarea>
-                TODO: string/object converter (parser)
+                <label>Please select your CSV file</label>
+                <input type="file" class="form-control" required file-change="handler($event,files)" ng-model="files"/>
               </div>
             </ng-form>
           </uib-tab>
-          <uib-tab index="2" heading="upload">
-            <ng-form name="uploadForm">
+          <uib-tab index="2" heading="input">
+            <ng-form name="inputForm">
               <div class="form-group">
-                <label>Please select your CSV file</label>
-                <input type="file" class="form-control" required ng-model="model.data"/>
-                TODO: file/object converter (parser) or file/string converter (using parser from input form)
+                <textarea class="form-control">{{model.data}}</textarea>
               </div>
             </ng-form>
           </uib-tab>
@@ -36,22 +36,12 @@
           <uib-tab index="4" heading="browse">
             TODO: tree browser
           </uib-tab>
-          <uib-tab index="5" heading="XML">
-            <pre></pre>
-            TODO: XML formatter 
-          </uib-tab>
-          <uib-tab index="6" heading="download">
-            TODO: file download
+          <uib-tab index="5" heading="XML & download">
+            <pre>{{model.xml | prettyXML }}</pre>
+            <xml-download id="content" get-data="getBlob()" />
           </uib-tab>
         </uib-tabset>
       </form>
-
-      <hr/>
- 
-      Model:
-      <pre>{{ model | json }}</pre>
-      Nested Form:
-      <pre>{{ mainForm.inputForm | json }}</pre>
     </div>
   </body>
 </html>
