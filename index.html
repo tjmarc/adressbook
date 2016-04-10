@@ -10,8 +10,7 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.rawgit.com/abdmob/x2js/master/xml2json.js"></script>
     <script src="https://www.reucon.com/cdn/js/vkBeautify-0.99.00.beta/vkbeautify.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-tree/2.15.0/angular-ui-tree.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-tree/2.15.0/angular-ui-tree.min.js"></script>
+    <script src="angular.treeview.min.js"></script>
   </head>
   <body>
     <form name="mainForm" class="tab-main-form">
@@ -21,7 +20,7 @@
           <div ng-controller="UploadCtrl">
             <ng-form name="uploadForm"> 
               <div class="form-group">
-                <label>Please select your CSV file</label>
+                <label>CSV file upload:</label>
                 <input type="file" class="form-control" file-change="handler($event,files)" ng-model="files"/>
               </div>
             </ng-form>
@@ -31,6 +30,7 @@
           <div ng-controller="InputCtrl">
             <ng-form name="inputForm">
               <div class="form-group">
+                <label>CSV data:</label>
                 <textarea class="form-control" ng-model="csv"></textarea>
                 <hr/>
                 <label>Parser log:</label>
@@ -42,11 +42,20 @@
         <uib-tab index="3" heading="Address book:" disable="true"></uib-tab>
         <uib-tab index="4" heading="browse">
           <div ng-controller="TreeCtrl">
-            TODO: XML tree view
+            <label>Address Book:</label>
+            <div
+              data-angular-treeview="true"
+              data-tree-id="mytree"
+              data-tree-model="treeData"
+              data-node-id="nodeId"
+              data-node-label="nodeValue"
+              data-node-children="children" >
+            </div>
           </div>
         </uib-tab>
         <uib-tab index="5" heading="XML & download">
           <div ng-controller="OutputCtrl">
+            <label>XML data:</label>
             <pre>{{xml | prettyXML}}</pre>
             <xml-download id="content" get-data="getBlob()" />
           </div>

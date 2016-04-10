@@ -1,4 +1,4 @@
-angular.module('addressbook', ['ui.bootstrap', 'ui.tree']);
+angular.module('addressbook', ['ui.bootstrap', 'angularTreeview']);
 
 /* solution based on:
 http://stackoverflow.com/questions/28070374/parsing-a-csv-file-provided-by-an-input-in-angular
@@ -14,6 +14,7 @@ app.service('PeopleData', function() {
   var data = [];
   var parserLog = '';
   var object = {};
+  var treeData = [];
   var xml = '';
   var mustRebuild = false;
   
@@ -36,6 +37,9 @@ app.service('PeopleData', function() {
     object = addressBook.people;
     parserLog = addressBook.parserLog.list();
     console.log('object:'+object.person.length+' persons');
+    addressBook.prepareTreeData();
+    treeData = addressBook.treeData;
+    console.log('treeData:'+treeData.length+' persons');
   };
 
   this.xmlBuilder = function() {
@@ -76,6 +80,10 @@ app.service('PeopleData', function() {
 
   this.getObject = function() {
     return object;
+  };
+
+  this.getTreeData = function() {
+    return treeData;
   };
 
   this.getXML = function() {
@@ -159,6 +167,49 @@ app.controller('InputCtrl', function($scope, $filter, PeopleData) {
 
 app.controller('TreeCtrl', function($scope, $filter, PeopleData) {
   $scope.object = PeopleData.getObject();
+  $scope.treeData = PeopleData.getTreeData();
+
+  $scope.$watch(
+    function() {
+      return PeopleData.getObject();
+    },                       
+    function(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        $scope.object = newValue; 
+        console.log('getObject: '+newValue.person.length+' persons');
+      }
+    }, 
+    true
+  );
+
+   $scope.$watch(
+    function() {
+      return PeopleData.getTreeData();
+    },                       
+    function(newValue, oldValue) {
+      if (newValue !== oldValue) {
+        $scope.treeData = newValue; 
+        console.log('getTreeData: '+newValue.length+' persons');
+      }
+    }, 
+    true
+  );
+
+    $scope.list = [
+        { "roleName" : "User", "roleId" : "role1", "children" : [
+          { "roleName" : "subUser1", "roleId" : "role11", "children" : [] },
+          { "roleName" : "subUser2", "roleId" : "role12", "children" : [
+            { "roleName" : "subUser2-1", "roleId" : "role121", "children" : [
+              { "roleName" : "subUser2-1-1", "roleId" : "role1211", "children" : [] },
+              { "roleName" : "subUser2-1-2", "roleId" : "role1212", "children" : [] }
+            ]}
+          ]}
+        ]},
+
+        { "roleName" : "Admin", "roleId" : "role2", "children" : [] },
+
+        { "roleName" : "Guest", "roleId" : "role3", "children" : [] }
+      ];
 
 });
 
