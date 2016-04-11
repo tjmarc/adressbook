@@ -1,12 +1,5 @@
 angular.module('addressbook', ['ui.bootstrap', 'angularTreeview']);
 
-/* solution based on:
-http://stackoverflow.com/questions/28070374/parsing-a-csv-file-provided-by-an-input-in-angular
-http://stackoverflow.com/questions/24080602/parsing-csv-in-javascript-and-angularjs
-http://stackoverflow.com/questions/16947771/how-do-i-ignore-the-initial-load-when-watching-model-changes-in-angularjs
-http://stackoverflow.com/questions/376373/pretty-printing-xml-with-javascript
-*/
-
 var app = angular.module('addressbook');
 
 app.service('PeopleData', function() {
@@ -195,22 +188,6 @@ app.controller('TreeCtrl', function($scope, $filter, PeopleData) {
     true
   );
 
-    $scope.list = [
-        { "roleName" : "User", "roleId" : "role1", "children" : [
-          { "roleName" : "subUser1", "roleId" : "role11", "children" : [] },
-          { "roleName" : "subUser2", "roleId" : "role12", "children" : [
-            { "roleName" : "subUser2-1", "roleId" : "role121", "children" : [
-              { "roleName" : "subUser2-1-1", "roleId" : "role1211", "children" : [] },
-              { "roleName" : "subUser2-1-2", "roleId" : "role1212", "children" : [] }
-            ]}
-          ]}
-        ]},
-
-        { "roleName" : "Admin", "roleId" : "role2", "children" : [] },
-
-        { "roleName" : "Guest", "roleId" : "role3", "children" : [] }
-      ];
-
 });
 
 app.controller('OutputCtrl', function($scope, $filter, PeopleData) {
@@ -223,15 +200,10 @@ app.controller('OutputCtrl', function($scope, $filter, PeopleData) {
     function(newValue, oldValue) {
       if (newValue !== oldValue) {
         $scope.xml = newValue; 
-        console.log('getXML: '+newValue.length+' bytes');
       }
     }, 
     true
   );
-
-  $scope.getBlob = function(){
-    return new Blob([$scope.xml], {type: "application/xml"});
-  }
 
 });
 
@@ -257,20 +229,23 @@ app.directive('fileChange',['$parse', function($parse){
   }
 }]);
 
-// this doesn't work as expected - the element is created when app starts
-app.directive('xmlDownload', function ($compile) {
+app.directive('xmlDownload', function ($compile, PeopleData) {
     return {
         restrict:'E',
-        scope:{ getUrlData:'&getData'},
+        scope: true,
         link:function (scope, element, attrs) {
-            var url = URL.createObjectURL(scope.getUrlData());
-            element.append($compile(
-                '<a class="btn" download="addressbook.xml" ' +
-                    'href="' + url + '">' +
-                    'Download' +
-                    '</a>'
-            )(scope));
+          scope.$watch('xml', function(newValue, oldValue) {
+            if (newValue !== oldValue) {
+              scope.url = URL.createObjectURL(new Blob([scope.xml], {type: "application/xml"}));
+              
+              element.empty().append($compile(
+                '<a class="btn" download="addressbook.xml" '
+                + 'href="' + scope.url + '">' + 'Download' + '</a>'
+              )(scope));
+            }
+          }, true);
         }
     };
 });  
+
 
