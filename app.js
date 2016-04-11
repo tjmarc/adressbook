@@ -12,54 +12,40 @@ app.service('PeopleData', function() {
   var mustRebuild = false;
   
   this.csvParser = function() {
-    console.log('csvParser:');
-    console.log('csv:'+csv.length+' bytes');
     // Windows, Mac, or Unix?
     var lines = csv.trim().split(/\r\n|\r|\n/);
     data = lines.map(function(line) {
         return line.split(/\|/);
     });
-    console.log('data:'+data.length+' rows');
   }
 
   this.objectBuilder = function() {
-    console.log('objectBuilder:');
-    console.log('data:'+data.length+' rows');
     var addressBook = new AddressBook();
     addressBook.parseData(data);
     object = addressBook.people;
     parserLog = addressBook.parserLog.list();
-    console.log('object:'+object.person.length+' persons');
     addressBook.prepareTreeData();
     treeData = addressBook.treeData;
-    console.log('treeData:'+treeData.length+' persons');
   };
 
   this.xmlBuilder = function() {
-    console.log('xmlBuilder:');
-    console.log('object:'+object.person.length+' persons');
     var x2js = new X2JS();
     xml = x2js.json2xml_str(object);
-    console.log('xml:'+xml.length+' bytes');
   };
 
   this.rebuild = function(csv) {
     if (this.mustRebuild) {
-      console.log('rebuilding...');
       this.csv = csv;
       this.csvParser();
       this.objectBuilder();
       this.xmlBuilder();
       this.mustRebuild = false;
-      console.log('done.');
     }
   }
 
   this.setCSV = function(input) {
-    console.log('setCSV:');
     csv = input;
     this.mustRebuild = true;
-    console.log('csv:'+csv.length+' bytes');
     this.rebuild();
   };
 
@@ -107,7 +93,6 @@ app.controller('UploadCtrl', function($scope, $filter, PeopleData) {
     function(newValue, oldValue) {
       if (newValue !== oldValue) {
         $scope.files = undefined; 
-        console.log('files erased');
       }
     }, 
     true
@@ -125,7 +110,6 @@ app.controller('InputCtrl', function($scope, $filter, PeopleData) {
     function(newValue, oldValue) {
       if (newValue !== oldValue) {
         PeopleData.setCSV(newValue); 
-        console.log('setCSV: '+newValue.length+' bytes');
       }
     }, 
     true
@@ -138,7 +122,6 @@ app.controller('InputCtrl', function($scope, $filter, PeopleData) {
     function(newValue, oldValue) {
       if (newValue !== oldValue) {
         $scope.csv = newValue; 
-        console.log('getCSV: '+newValue.length+' bytes');
       }
     }, 
     true
@@ -151,7 +134,6 @@ app.controller('InputCtrl', function($scope, $filter, PeopleData) {
     function(newValue, oldValue) {
       if (newValue !== oldValue) {
         $scope.parserLog = newValue; 
-        console.log('getParserLog: '+newValue.length+' bytes');
       }
     }, 
     true
@@ -169,7 +151,6 @@ app.controller('TreeCtrl', function($scope, $filter, PeopleData) {
     function(newValue, oldValue) {
       if (newValue !== oldValue) {
         $scope.object = newValue; 
-        console.log('getObject: '+newValue.person.length+' persons');
       }
     }, 
     true
@@ -182,7 +163,6 @@ app.controller('TreeCtrl', function($scope, $filter, PeopleData) {
     function(newValue, oldValue) {
       if (newValue !== oldValue) {
         $scope.treeData = newValue; 
-        console.log('getTreeData: '+newValue.length+' persons');
       }
     }, 
     true

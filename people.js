@@ -145,7 +145,6 @@ AddressBook.prototype.parseData = function(dataArray) {
 
 AddressBook.prototype.prepareTreeData = function() {
   var treeData = [];
-  console.log("prepareTreeData: " + this.people.person.length + " persons");
   this.people.person.forEach( function(person, index, data) {
     var node = { 
       nodeValue: person.firstname + " " + person.lastname,
@@ -155,7 +154,6 @@ AddressBook.prototype.prepareTreeData = function() {
         { nodeValue: "last name: " + person.lastname, nodeId: "person_" + index + '_lastname', children: [] },
       ] 
     };
-    console.log(node.element);
     if (person.mobile || person.fixedNumber) {
       var phoneNumbers = { 
         nodeValue: "phone numbers", 
