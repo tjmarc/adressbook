@@ -1,10 +1,11 @@
-# adressbook - A test project using AngularJS
+## adressbook - A test project using AngularJS
 
+# AngularJS Programming Task: 
+# Web interface for file conversion
 
-# AngularJS Programming Task: Web interface for file conversion
+Create a single page web application using AngularJS 1.5, Bootstrap and HTML5. 
 
-
-Create a single page web application using AngularJS 1.5, Bootstrap and HTML5. There should not be any server, i.e. everything should run in the web browser.
+There should not be any server, i.e. everything should run in the web browser.
 
 It should be possible to both upload an input file and enter input in a text field.
 
@@ -16,10 +17,10 @@ Provide the solution in a repository on GitHub or Bitbucket.
 
 ## Input format:
 
-  P|firstname|lastname
-  T|mobile|fixed number
-  A|street|city|postal code
-  F|name|year of birth
+	P|firstname|lastname
+	T|mobile|fixed number
+	A|street|city|postal code
+	F|name|year of birth
 
 P can be followed by T, A and/or F
 
